@@ -1,0 +1,35 @@
+from flask import Flask, request, Response
+import plivoxml
+
+app=Flask(__name__)
+
+@app.route('/dial/', methods=['GET','POST'])
+def dial_xml():
+
+    # Generate Dial XML
+
+    response = plivoxml.Response()
+    params = {
+        'action' : "https://example.com/dial_status/",
+        'method' : 'GET'
+    }
+    response.addSpeak("Connecting your call..")
+    d = response.addDial(**params)
+    d.addNumber("14158408583")
+    print response.to_xml()
+    return Response(str(response), mimetype='text/xml')
+
+@app.route('/dial_status/', methods=['GET','POST'])
+def dial_status():
+
+    # After completion of the call, report back the status to the action URL in the Dial XML.
+
+    status = request.args.get('DialStatus')
+    aleg = request.args.get('DialALegUUID')
+    bleg = request.args.get('DialBLegUUID')
+    print "Status : %s, ALeg Uuid : %s, BLeg Uuid : %s" % (status,aleg,bleg)
+    return "Dial status reported"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', debug=True)
+        

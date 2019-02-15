@@ -1,0 +1,18 @@
+from flask import Flask, request, make_response
+import plivo, plivoxml
+
+app = Flask(__name__)
+
+@app.route('/speak/', methods=['GET','POST'])
+def speak_xml():
+    # Generate a Speak XML with the details of the text to play on the call.
+    body = "Hello, you just received your first call"
+    r = plivoxml.Response()
+    r.addSpeak(body)
+
+    print r.to_xml()
+    return Response(str(r), mimetype='text/xml')
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', debug=True)
+        

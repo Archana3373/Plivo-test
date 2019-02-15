@@ -1,0 +1,19 @@
+import plivo, plivoxml
+
+auth_id = "MAODUZYTQ0Y2FMYJBLOW"
+auth_token = "ODgyYmQxYTQ2N2FkNDFiZTNhZWY4MDAwYWY4NzY0"
+
+p = plivo.RestAPI(auth_id, auth_token)
+
+response = p.get_cdrs()
+print str(response)
+        
+
+# Filtering the records based on call_uuid
+params = {
+    'call_uuid': '55309cee-821d-11e4-9a73-498d468c930b' # The ID of the call
+}
+
+response = p.get_cdr(params)
+print str(response)
+
